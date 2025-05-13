@@ -12,27 +12,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up SSH Key
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          echo "SSH key file contents:"
-          cat ~/.ssh/deploy_key
-        env:
-          SSH_KEY: ${{ secrets.VM_PRIVATE_KEY }}
-
-      - name: Debug Connection
-        run: |
-          echo "Testing SSH connection..."
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -p 22 ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} 'echo "SSH connection successful"'
-
-      - name: SSH into VM and Deploy
-        uses: appleboy/ssh-action@master
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
-          key_path: ~/.ssh/deploy_key
+          key: ${{ secrets.VM_PRIVATE_KEY }}
           port: 22
           script: |
             cd ~/msa

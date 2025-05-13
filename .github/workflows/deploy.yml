@@ -1,0 +1,28 @@
+name: CI-CD to Local VM
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: SSH into VM and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          script: |
+            cd ~/app
+            git pull origin main
+            ./gradlew build -p backend  # Spring 프로젝트 jar 생성
+            docker-compose down
+            docker-compose build
+            docker-compose up -d
+

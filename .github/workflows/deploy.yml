@@ -12,13 +12,24 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Debug SSH Key
+        run: |
+          echo "SSH Key length: ${#SSH_KEY}"
+          echo "First few characters: ${SSH_KEY:0:10}..."
+        env:
+          SSH_KEY: ${{ secrets.VM_PRIVATE_KEY }}
+
       - name: SSH into VM and Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
+          port: 22
           script: |
             cd ~/msa
+            chmod +x ./deploy.sh
             ./deploy.sh
+          timeout: 60s
+          command_timeout: 15m
 

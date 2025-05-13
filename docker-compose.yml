@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    # volumes:
+    #   - ./backend:/app
+    restart: always
+    networks:
+      - msa-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - msa-network
+
+networks:
+  msa-network:
+    driver: bridge

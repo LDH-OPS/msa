@@ -19,10 +19,6 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
           script: |
-            cd ~/app
-            git pull origin main
-            ./gradlew build -p backend  # Spring 프로젝트 jar 생성
-            docker-compose down
-            docker-compose build
-            docker-compose up -d
+            cd ~/msa
+            ./deploy.sh
 

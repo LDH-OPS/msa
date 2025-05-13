@@ -15,7 +15,7 @@ public class Application {
     static class HelloController {
         @GetMapping("/api/hello")
         public String hello() {
-            return "Hello from MSA Backend!";
+            return "Hello from MSA Backend! (Updated: " + java.time.LocalDateTime.now() + ")";
         }
     }
 }

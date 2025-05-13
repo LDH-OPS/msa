@@ -12,6 +12,6 @@ public class HelloController {
     public String hello() {
         LocalDateTime now = LocalDateTime.now();
         String formattedTime = now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        return "Hello from MSA Backend! CI/CD Test - " + formattedTime;
+        return String.format("[CI/CD Test #2] Hello from MSA Backend! Updated at: %s", formattedTime);
     }
 }
